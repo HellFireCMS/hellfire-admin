@@ -28,7 +28,6 @@ const Tiptap = () => {
               }
             }
             console.log(JSON.stringify(json))
-            editor?.commands.deleteSelection()
         }}>Get json</button>
     </div>
   )
