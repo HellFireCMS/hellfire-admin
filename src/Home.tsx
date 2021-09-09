@@ -6,7 +6,7 @@ import {
   Route,
   Switch,
 } from "react-router-dom";
-import { Login } from "./Pages/Login";
+import { Login } from "./Pages/Auth/Login";
 import Tiptap from "./Tiptap";
 import { PrivateRoute } from "./utils/PrivateRoute";
 

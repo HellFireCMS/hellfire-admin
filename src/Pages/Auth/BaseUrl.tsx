@@ -3,16 +3,32 @@ import { useAtom } from "jotai";
 import React from "react";
 import { useRef } from "react";
 import { useState } from "react";
-import { Button, FlexboxGrid, Input, Form, Schema, InputGroup } from "rsuite";
-import { ApiClient, ApiClientAtom } from "../Api/client";
-import { BottomPadding } from "../utils/helpers";
+import {
+  Button,
+  FlexboxGrid,
+  Input,
+  Form,
+  Schema,
+  InputGroup,
+  Col,
+  ButtonToolbar,
+  ButtonGroup,
+} from "rsuite";
+import { ApiClient, ApiClientAtom } from "../../Api/client";
+import { BottomPadding } from "../../utils/helpers";
 
 export function BaseUrlScreen() {
   const model = Schema.Model({
-    baseUrl: Schema.Types.StringType().pattern(/^(?!https?).*$/, "Please dont enter the protocol (https:// or http://)").pattern(
-      /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/,
-      "This is not a valid url"
-    ).isRequired("We can't proceed without the URL!!"),
+    baseUrl: Schema.Types.StringType()
+      .pattern(
+        /^(?!https?).*$/,
+        "Please don't enter the protocol (https:// or http://)"
+      )
+      .pattern(
+        /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/,
+        "This is not a valid url"
+      )
+      .isRequired("We can't proceed without the URL!"),
   });
   const [baseUrl, setBaseUrl] = useState<string>("");
   const [, setApiClient] = useAtom(ApiClientAtom);
@@ -26,7 +42,7 @@ export function BaseUrlScreen() {
       as={motion.div}
       key="baseUrlScreen"
     >
-      <FlexboxGrid.Item colspan={8}>
+      <FlexboxGrid.Item as={Col} colspan={20} lg={9} md={12} sm={16}>
         <motion.div
           initial={{ y: 300, opacity: 0 }}
           animate={{
@@ -36,7 +52,7 @@ export function BaseUrlScreen() {
               bounce: 0,
             },
           }}
-          exit={{ y: -300, opacity: 0 }}
+          exit={{ y: 300, opacity: 0 }}
         >
           <BottomPadding>
             <motion.h2>Where is your Hellfire hosted?</motion.h2>
@@ -46,7 +62,7 @@ export function BaseUrlScreen() {
             model={model}
             fluid
             onChange={(formValue) => {
-                console.log(formValue)
+              console.log(formValue);
               setBaseUrl("https://" + formValue["baseUrl"]);
             }}
             ref={ref}
@@ -62,17 +78,25 @@ export function BaseUrlScreen() {
               </InputGroup>
               <Form.HelpText>Enter the complete url</Form.HelpText>
             </Form.Group>
-            <Button
-              block
-              appearance="primary"
-              onClick={() => {
-                if (ref.current.check()) {
-                  setApiClient(new ApiClient(baseUrl));
-                }
-              }}
-            >
-              Unleah HellFire!
-            </Button>
+            <ButtonGroup block justified>
+              <Button
+                appearance="primary"
+                onClick={() => {
+                  if (ref.current.check()) {
+                    setApiClient(new ApiClient(baseUrl));
+                  }
+                }}
+              >
+                Unleash HellFire!
+              </Button>
+              <Button
+                onClick={() => {
+                  setApiClient(new ApiClient("http://localhost:8080"));
+                }}
+              >
+                Use localhost
+              </Button>
+            </ButtonGroup>
           </Form>
         </motion.div>
       </FlexboxGrid.Item>

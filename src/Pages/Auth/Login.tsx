@@ -14,10 +14,10 @@ import {
   IconButton,
   Schema,
 } from "rsuite";
-import { ApiClientAtom, handleLogin } from "../Api/client";
-import { userAtom } from "../Atoms/Auth";
-import { BaseUrlScreen } from "../Components/BaseUrl";
-import { BottomPadding } from "../utils/helpers";
+import { ApiClientAtom, handleLogin } from "../../Api/client";
+import { userAtom } from "../../Atoms/Auth";
+import { BaseUrlScreen } from "./BaseUrl";
+import { BottomPadding } from "../../utils/helpers";
 import { EditOutline } from "@styled-icons/evaicons-outline";
 
 export function Login() {
@@ -74,7 +74,7 @@ export function Login() {
                 bounce: 0,
               },
             }}
-            exit={{ y: -300, opacity: 0 }}
+            exit={{ y: 300, opacity: 0 }}
             key="loginScreen"
           >
             <FlexboxGrid.Item as={Col} colspan={20} lg={9} md={12} sm={16}>
