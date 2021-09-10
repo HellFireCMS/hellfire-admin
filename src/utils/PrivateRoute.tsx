@@ -1,8 +1,8 @@
 import { useAtom } from "jotai";
 import React from "react";
 import { Redirect, Route } from "react-router-dom";
+import { ApiClientAtom } from "../Api/client";
 import { userAtom } from "../Atoms/Auth";
-import { configAtom } from "../Atoms/Config";
 
 export function PrivateRoute({
   children,
@@ -12,13 +12,13 @@ export function PrivateRoute({
   path: string;
 }) {
   const [user] = useAtom(userAtom);
-  const [config] = useAtom(configAtom);
+  const [apiClient] = useAtom(ApiClientAtom);
   console.log(user);
   return (
     <Route
       path={path}
       render={({ location }) =>
-        user != undefined && config.backendUrl != undefined ? (
+        !(user == undefined || apiClient == undefined) ? (
           children
         ) : (
           <Redirect

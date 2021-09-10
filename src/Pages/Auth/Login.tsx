@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAtom } from "jotai";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useMutation } from "react-query";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -23,7 +23,7 @@ import { EditOutline } from "@styled-icons/evaicons-outline";
 export function Login() {
   const history = useHistory();
   const formref = useRef<any>();
-  const [, setUser] = useAtom(userAtom);
+  const [user, setUser] = useAtom(userAtom);
   const [apiClient, setApiClient] = useAtom(ApiClientAtom);
   let fromPath = useLocation<string>().state;
 
@@ -57,6 +57,14 @@ export function Login() {
     return user;
   });
 
+  useEffect(() => {
+    if (user != undefined) {
+      history.replace(fromPath);
+    } else if (user == undefined && localStorage.getItem("user") != null) {
+      setUser(JSON.parse(localStorage.getItem("user")!));
+    }
+  }, [user]);
+
   return (
     <div>
       <AnimatePresence exitBeforeEnter>
@@ -86,17 +94,21 @@ export function Login() {
                     alignItems: "center",
                   }}
                 >
-                  Accessing HellFire at 
+                  Accessing HellFire at
                   <ButtonGroup>
-                    <Button appearance="subtle" style={{
-                      maxWidth: "clamp(0px, 30vw, 300px)"
-                    }}>
+                    <Button
+                      appearance="subtle"
+                      style={{
+                        maxWidth: "clamp(0px, 30vw, 300px)",
+                      }}
+                    >
                       {apiClient!.baseUrl ?? "none"}
                     </Button>
                     <IconButton
                       appearance="subtle"
                       icon={<EditOutline size={14} />}
                       onClick={() => {
+                        localStorage.removeItem("base_url");
                         setApiClient(undefined);
                       }}
                     />
@@ -136,13 +148,15 @@ export function Login() {
                     if (formref.current.check()) {
                       try {
                         let res = await mutation.mutateAsync();
-                        console.log(res, fromPath);
+                        localStorage.setItem("user", JSON.stringify(res));
                         setUser(res);
-                        history.replace(fromPath);
-                      } catch (error) {
+                      } catch (error: any) {
                         console.log(error);
                         let err: AxiosError = error;
-                        toast(err.response?.data.data.message ?? "Error");
+                        toast(
+                          err.response?.data.data.message ??
+                            "An Unexpected Error occurred. Please try again"
+                        );
                       }
                     }
                   }}

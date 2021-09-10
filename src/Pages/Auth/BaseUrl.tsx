@@ -83,6 +83,7 @@ export function BaseUrlScreen() {
                 appearance="primary"
                 onClick={() => {
                   if (ref.current.check()) {
+                    localStorage.setItem("base_url", baseUrl);
                     setApiClient(new ApiClient(baseUrl));
                   }
                 }}
@@ -91,6 +92,7 @@ export function BaseUrlScreen() {
               </Button>
               <Button
                 onClick={() => {
+                  localStorage.setItem("base_url", "http://localhost:8080");
                   setApiClient(new ApiClient("http://localhost:8080"));
                 }}
               >

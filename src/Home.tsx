@@ -1,13 +1,11 @@
-import { useAtom } from "jotai";
 import React from "react";
 import {
   BrowserRouter as Router,
-  Redirect,
   Route,
   Switch,
 } from "react-router-dom";
 import { Login } from "./Pages/Auth/Login";
-import Tiptap from "./Tiptap";
+import { Dashboard } from "./Pages/Dashboard";
 import { PrivateRoute } from "./utils/PrivateRoute";
 
 export function Home() {
@@ -18,7 +16,7 @@ export function Home() {
           <Login />
         </Route>
         <PrivateRoute path="/">
-          <Tiptap />
+          <Dashboard />
         </PrivateRoute>
       </Switch>
     </Router>
